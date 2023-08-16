@@ -1,0 +1,45 @@
+Create Image out of a Container
+Usually we create a Image out of Dockerfile. But we can still create an image out of a container
+
+Pre-requisites
+Docker environment
+dockerhub account
+Procedure
+Steps we are following
+
+pull nginx image
+Create a container
+Do some changes on the container
+Create an image using container
+Push image to hub.docker.com
+Remove container and image
+create container using our custom image
+We could able to see changes
+Demonstration
+Pull nginx docker image
+
+docker pull nginx:latest
+Create a container using nginx image
+
+docker run -dt --name vtproxyuat01 -p 8080:80 nginx:latest 
+docker exec -it vtproxyuat01 /bin/bash
+	or
+docker run -it --name vtproxyuat01 -p 8080:80 nginx:latest /bin/bash
+Modify index.html file on container
+
+cat >> /user/share/nginx/html/index.html
+Create an image out of the container
+
+docker commit vtproxyuat01 <docker_account_id>/vtproxyimage:<tage_name>
+Push image to dockerhub account
+
+docker push <docker_account_id>/vtproxyimage:<tage_name>
+Remove containers and images
+
+docker stop vtproxyuat01
+docker rm vtproxyuat01
+docker system prune --all // to remove all stopped containers and unused images 
+Create a container using image which we pushed to dockerhub.
+
+docker run -it --name vtproxyuat02 -p 8080:80 <docker_account_id>/vtproxyimage:<tage_name> /bin/bash
+Check for the content in the file. We could see same our changes.
